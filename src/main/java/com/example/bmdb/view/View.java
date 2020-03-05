@@ -13,43 +13,63 @@ public class View {
 		input = new Scanner(System.in);
 	}
 	
+	public void printWelcomeMessage() {
+		System.out.println("Welcome to the BMDb application!\n");
+	}
+	
 	public String getUsername() {
-		System.out.print("\nUsername: ");
+		System.out.print("Username: ");
 		String username = input.nextLine();
 		return username;
 	}
 	
 	public String getPassword() {
-		System.out.print("\nPassword: ");
+		System.out.print("Password: ");
 		String password = input.nextLine();
 		return password;
 	}
 	
-	public void showLogInErrorMessage() {
+	public void printLogInErrorMessage() {
 		System.out.println("\nUsername or password is incorrect. Please try again!");
 	}
 	
+	public void printMediaNotFoundMessage() {
+		System.out.print("\nMedia is not found. Select another ID. [Press ENTER]");
+		input.nextLine();
+	}
+	
 	public void greetUser(User user) {
-		System.out.println("\nHi " + user.getUsername() + ", how are you?");
+		System.out.println("\nHi " + user.getUsername() + ", how are you? [Press ENTER]");
+		input.nextLine();
 	}
 	
 	public void printMedias(List<Media> medias) {
 		for (Media media : medias) {
-			media.toString();
+			System.out.println(media.toString());
 		}
 	}
 	
 	public int readSelectedId() {
-		System.out.print("\n Select an ID: ");
+		System.out.print("\nSelect an ID: ");
 		int id = input.nextInt();
 		input.nextLine();
 		return id;
 	}
 	
+	public String readReviewText() {
+		System.out.print("\nWrite review: ");
+		String reviewText = input.nextLine();
+		return reviewText;
+	}
+	
+	public String readReviewRating() {
+		System.out.print("\nRate the content [bad/average/good]: ");
+		String reviewRating = input.nextLine();
+		return reviewRating;
+	}
+	
 	public boolean askUserForAnotherReview() {
-		System.out.print("\nDo you want to write another review? ");
-		boolean answer = input.nextBoolean();
-		input.nextLine();
-		return answer;
+		System.out.print("\nDo you want to write another review? [yes/no]: ");
+		return input.nextLine().toLowerCase().equals("yes");
 	}
 }

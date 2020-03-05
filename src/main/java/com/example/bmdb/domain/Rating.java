@@ -6,10 +6,25 @@ import java.util.Map;
 public enum Rating {
     BAD(1), AVERAGE(3), GOOD(5);
 	
-    public final int rate;
+    private final int rate;
     
     private Rating(int rate) {
         this.rate = rate;
+    }
+    
+    public static Rating Parse(String rating) {
+    	switch (rating.toLowerCase()) {
+		case "bad":
+			return Rating.BAD;
+		case "good":
+			return Rating.GOOD;
+		default:
+			return Rating.AVERAGE;
+		}
+    }
+    
+    public int getRate() {
+    	return rate;
     }
     
     private static final Map<Rating, Integer> BY_RATE = new HashMap<Rating, Integer>();
