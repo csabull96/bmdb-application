@@ -1,4 +1,4 @@
-package com.example.bmdb.view;
+package com.example.bmdb.app;
 
 import java.util.List;
 import java.util.Scanner;

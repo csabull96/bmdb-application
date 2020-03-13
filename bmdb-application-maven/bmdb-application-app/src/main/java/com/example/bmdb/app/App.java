@@ -7,7 +7,6 @@ import com.example.bmdb.domain.Rating;
 import com.example.bmdb.domain.Review;
 import com.example.bmdb.domain.User;
 import com.example.bmdb.service.Service;
-import com.example.bmdb.view.View;
 
 public class App {
 	private Service service;
