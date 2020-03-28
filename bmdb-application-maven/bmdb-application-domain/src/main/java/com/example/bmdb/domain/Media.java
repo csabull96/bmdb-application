@@ -30,6 +30,10 @@ public abstract class Media {
 		return id;
 	}
 	
+	public String getTitle() {
+		return title;
+	}
+	
 	public void addReview(Review review) {
 		reviews.add(review);
 	}
