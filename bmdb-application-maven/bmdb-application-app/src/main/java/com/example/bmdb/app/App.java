@@ -23,7 +23,8 @@ public class App {
 		view.printWelcomeMessage();
 		loggedInUser = logIn();
 		view.greetUser(loggedInUser);
-		doReview();	
+		doReview();
+		view.farewellUser(loggedInUser);
 	}
 	
 	private User logIn() {

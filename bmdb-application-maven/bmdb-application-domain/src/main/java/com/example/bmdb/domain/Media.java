@@ -37,7 +37,7 @@ public abstract class Media {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("\nMedia {")
+		sb.append("Media {")
 		  .append("\n\tID: " + this.id)
 		  .append("\n\tTitle: " + this.title)
 		  .append("\n\tDescription: " + this.description)
@@ -56,7 +56,7 @@ public abstract class Media {
 		}
 	    
 	    sb.append("\n\t}")
-	      .append("\n}");
+	      .append("\n}\n");
 		
 	    return sb.toString();
 	}
