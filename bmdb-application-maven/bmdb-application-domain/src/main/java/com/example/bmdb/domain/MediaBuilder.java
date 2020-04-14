@@ -3,13 +3,14 @@ package com.example.bmdb.domain;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class MediaBuilder {
 	private BigDecimal id;
 	private String title;
 	private String description;
-	private LocalDate premiereDate;
+	private Calendar premiereDate;
 	private List<Actor> cast;
 	private List<Review> reviews;
 	
@@ -45,12 +46,12 @@ public class MediaBuilder {
 		return description;
 	}
 	
-	public MediaBuilder setPremiereDate(LocalDate premiereDate) {
+	public MediaBuilder setPremiereDate(Calendar premiereDate) {
 		this.premiereDate = premiereDate;
 		return this;
 	}
 	
-	public LocalDate getPremiereDate() {
+	public Calendar getPremiereDate() {
 		return premiereDate;
 	}
 	

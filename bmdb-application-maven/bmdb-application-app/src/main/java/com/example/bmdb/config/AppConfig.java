@@ -12,7 +12,7 @@ import com.example.bmdb.service.Service;
 
 @Configuration
 @PropertySource(value = {"classpath:config.properties"}, encoding = "UTF-8")
-@Import({ServiceConfig.class, ViewConfig.class})
+@Import({ServiceConfig.class, ViewConfig.class, SpringConfigurationDataSource.class, SpringConfigurationJpa.class})
 public class AppConfig {
 	
 	@Autowired
