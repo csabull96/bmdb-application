@@ -1,46 +1,46 @@
 package com.example.bmdb.service;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalDouble;
+import java.util.Set;
 
-import com.example.bmdb.database.Database;
 import com.example.bmdb.domain.Media;
 import com.example.bmdb.domain.Review;
 import com.example.bmdb.domain.User;
+import com.example.bmdb.repository.CentralRepository;
 
 public class Service {
-	private Database database;
+	private CentralRepository repository;
 	
-	public Service(Database database) {
+	public Service(CentralRepository repository) {
 		super();
-		this.database = database;
+		this.repository = repository;
 	}
 	
 	public Optional<User> logIn(String username, String password) {	
-		return database.getUsers().stream()
-				.filter(u -> u.getUsername().equals(username))
-				.filter(u -> u.getPassword().equals(password))
-				.findFirst();
+		
+		Optional<User> user = repository.findUserByUsername(username);
+		if (user.isPresent() && user.get().getPassword().equals(password)) {
+			return user;
+		}
+		return Optional.empty();
 	}
 	
-	public void saveUser(User user) {
-		database.getUsers().add(user);
+	public void saveReview(Review review) {
+		repository.saveReview(review);
 	}
 	
-	public Optional<Media> getMedia(int id) {
-		return database.getMedias().stream()
-				.filter(m -> m.getId().compareTo(new BigDecimal(id)) == 0)
-				.findFirst();
+	public Optional<Media> findMediaById(Long id) {
+		return repository.findMediaById(id);
 	}
 	
-	public List<Media> getAllMedia(){
-		return database.getMedias();
+	public Set<Media> findAllMedia() {
+		return repository.findAllMedia();
 	}
 	
-	public List<Review> getAllReviews(Media media){
-		return database.getReviews();
+	public void generateTestData() {
+		repository.generateTestData();
 	}
 	
 	public double getAverageOfRatings(List<Review> reviews) {

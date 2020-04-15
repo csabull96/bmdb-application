@@ -5,18 +5,18 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import com.example.bmdb.database.Database;
+import com.example.bmdb.repository.CentralRepository;
 import com.example.bmdb.service.Service;
 
 @Configuration
-@Import({DatabaseConfig.class})
+@Import({CentralRepositoryConfig.class})
 public class ServiceConfig {
 
 	@Autowired
-	private Database database;
+	private CentralRepository repository;
 	
 	@Bean
 	public Service getService() {
-		return new Service(database);
+		return new Service(repository);
 	}
 }

@@ -26,6 +26,9 @@ public class App {
 	}
 
 	public void play() {
+		LOGGER.info("generating test data");
+		service.generateTestData();
+		LOGGER.info("test data has been successfully generated");
 		LOGGER.info("application launched");
 		view.printWelcomeMessage();
 		loggedInUser = logIn();
@@ -57,13 +60,14 @@ public class App {
 	private void doReview() {
 		boolean again = true; 
 		while (again) {
-			view.printMedias(service.getAllMedia());
-			int id = view.readSelectedId();
-			Optional<Media> selected = service.getMedia(id);
+			view.printMedias(service.findAllMedia());
+			Long id = view.readSelectedId();
+			Optional<Media> selected = service.findMediaById(id);
 			if (selected.isPresent()) {
 				String text = view.readReviewText();
-				Rating rating = Rating.Parse(view.readReviewRating());
-				selected.get().addReview(new Review(loggedInUser, text, rating));
+				Rating rating = Rating.Parse(view.readReviewRating());			
+				service.saveReview(new Review(loggedInUser, selected.get(), text, rating));
+	
 				LOGGER.info("\"{}\" added a new review to \"{}\"", loggedInUser.getUsername(), selected.get().getTitle());
 				if (!view.askUserForAnotherReview()) {
 					again = false;

@@ -1,36 +1,42 @@
 package com.example.bmdb.domain;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
 public class Actor {
+	
 	@Id
 	@GeneratedValue
 	@Column(name = "actor_id")
 	private Long id;
+	
 	private String name;
+	
 	@Temporal(TemporalType.DATE)
 	private Calendar dateOfBirth;
+	
 	@Enumerated(EnumType.STRING)
 	private Sex sex;
+	
 	private String biography;
-	@OneToMany
-	private List<Media> filmography;
+	
+	@ManyToMany(mappedBy = "cast")
+	private Set<Media> filmography = new HashSet<>();
 	
 	public Actor() {}
 	
@@ -40,7 +46,7 @@ public class Actor {
 		this.dateOfBirth = dateOfBirth;
 		this.sex = sex;
 		this.biography = biography;
-		filmography = new ArrayList<Media>();
+		filmography = new HashSet<Media>();
 	}
 	
 	public String getName() {
@@ -75,20 +81,23 @@ public class Actor {
 		this.biography = biography;
 	}
 
-	public void setFilmography(List<Media> filmography) {
+	public void setFilmography(Set<Media> filmography) {
 		this.filmography = filmography;
 	}
 
-	public List<Media> getFilmography() {
+	public Set<Media> getFilmography() {
 		return filmography;
 	}
 
 	@Override
 	public String toString() {
+		
+		DateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
+		
 		StringBuilder sb = new StringBuilder();
 		sb.append("\n\t\tActor {")
 		  .append("\n\t\t\t Name: " + this.name)
-		  .append("\n\t\t\t Date of Birth: " + this.dateOfBirth)
+		  .append("\n\t\t\t Date of Birth: " + dateFormat.format(this.dateOfBirth.getTime()))
 		  .append("\n\t\t\t Biography: " + this.biography)
 		  .append("\n\t\t}");
 		

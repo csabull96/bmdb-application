@@ -1,14 +1,15 @@
 package com.example.bmdb.domain;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.Transient;
 
 @Entity
 public class User {
@@ -17,12 +18,18 @@ public class User {
 	@GeneratedValue
 	@Column(name = "user_id")
 	private Long id;
+	
 	private String name;
+	
+	@Column(unique = true)
 	private String username;
+	
+	@Column(unique = true)
 	private String email;
 	private String password;
-	@OneToMany(cascade = CascadeType.ALL)
-	private List<Review> reviews;
+	
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "creator")
+	private Set<Review> reviews = new HashSet<>();
 	
 	public User() {}
 	
@@ -74,11 +81,11 @@ public class User {
 		this.password = password;
 	}
 
-	public List<Review> getReviews() {
+	public Set<Review> getReviews() {
 		return reviews;
 	}
 
-	public void setReviews(List<Review> reviews) {
+	public void setReviews(Set<Review> reviews) {
 		this.reviews = reviews;
 	}
 }

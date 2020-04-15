@@ -1,18 +1,13 @@
-package com.example.bmdb.app;
+package com.example.bmdb.repository;
 
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.GregorianCalendar;
-import java.util.HashSet;
-
+import java.util.Optional;
 import java.util.Set;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-import com.example.bmdb.app.App;
-import com.example.bmdb.config.AppConfig;
 import com.example.bmdb.domain.Actor;
 import com.example.bmdb.domain.Media;
 import com.example.bmdb.domain.MediaBuilder;
@@ -20,29 +15,48 @@ import com.example.bmdb.domain.Rating;
 import com.example.bmdb.domain.Review;
 import com.example.bmdb.domain.Sex;
 import com.example.bmdb.domain.User;
-import com.example.bmdb.repository.MediaRepository;
-import com.example.bmdb.repository.ReviewRepository;
-import com.example.bmdb.repository.UserRepository;
 
-public class Client {
-	public static void main(String[] args) throws SQLException {
-		try (ConfigurableApplicationContext appContext = new AnnotationConfigApplicationContext(AppConfig.class)) {
-            App app = appContext.getBean(App.class);       		
-            app.play();
-		}	
+public class CentralRepository {
+
+	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
+	private ActorRepository actorRepository;
+	
+	@Autowired
+	private MediaRepository mediaRepository;
+	
+	@Autowired
+	private ReviewRepository reviewRepository;
+
+	public CentralRepository() {
+		//generateTestData();
 	}
 	
-	private static void generateTestData(ApplicationContext context) {
+	public Optional<User> findUserByUsername(String username) {
+		return userRepository.findByUsername(username);
+	}
+	
+	public Optional<Media> findMediaById(Long id) {
+		return mediaRepository.findById(id);
+	}
+	
+	public void saveReview(Review review) {
+		reviewRepository.save(review);
+	}
+	
+	public Set<Media> findAllMedia() {
+		return mediaRepository.findAll();
+	}
+	
+	public void generateTestData() {
 		
-		UserRepository userRepo = context.getBean(UserRepository.class);	
-		Set<User> users = new HashSet<>();	
 		User csabaSandor = new User("Csaba Sandor", "csabull96", "csaba.sandor@gmail.com", "password");
 		User joelleHaddad = new User("Joelle Haddad", "joelle00", "joelle.haddad@gmail.com", "password");
-		User stephenCurry = new User("Stephen Curry", "stephen89", "stephen.curry@gmail.com", "password");
-		users.addAll(Arrays.asList(csabaSandor, joelleHaddad, stephenCurry));	
-		userRepo.saveAll(users);
+		User stephenCurry = new User("Stephen Curry", "stephen89", "stephen.curry@gmail.com", "password");	
+		userRepository.saveAll(Arrays.asList(csabaSandor, joelleHaddad, stephenCurry));
 		
-		Set<Actor> actors = new HashSet<>();
 		Actor theRock = new Actor("Dwayne Johnson", new GregorianCalendar(1972, 5, 2), Sex.MALE, "Also known by his ring name The Rock, is an American actor, producer, businessman, and former professional wrestler[7] and football player");
 		Actor nickJonas = new Actor("Nick Jerry Jonas", new GregorianCalendar(1992, 9, 16), Sex.MALE, "American singer, songwriter and actor.");
 		Actor robCorddry = new Actor("Robert William Corddry", new GregorianCalendar(1971, 2, 4), Sex.MALE, "American actor and comedian.");
@@ -52,10 +66,7 @@ public class Client {
 		Actor jenniferAniston = new Actor("Jennifer Joanna Aniston", new GregorianCalendar(1969, 2, 11), Sex.FEMALE, "American actress, film producer, and businesswoman. Aniston rose to international fame portraying Rachel Green on the television sitcom Friends, for which she earned Primetime Emmy, Golden Globe, and Screen Actors Guild awards.");
 		Actor mattLeBlanc = new Actor("Matthew Steven LeBlanc", new GregorianCalendar(1967, 7, 25), Sex.MALE, "American actor and comedian. He is best known for his portrayal of dim-witted yet well-intentioned womaniser Joey Tribbiani in the NBC sitcom Friends and in its spin-off series Joey.");
 		Actor matthewPerry = new Actor("Matthew Langford Perry", new GregorianCalendar(1969, 8, 19), Sex.MALE, "American-Canadian actor, comedian and playwright who gained worldwide recognition for his role as Chandler Bing on the NBC television sitcom Friends.");
-		actors.addAll(Arrays.asList(theRock, nickJonas, robCorddry, matthewMcConaughey, anneHathaway, charlieHunnam, jenniferAniston, mattLeBlanc, matthewPerry));
-		
-		MediaRepository mediaRepo = context.getBean(MediaRepository.class);
-		Set<Media> medias = new HashSet<>();	
+			
 		Media jumanji = new MediaBuilder().setTitle("Jumanji: Welcome to the Jungle")
 				.setDescription("Four teenagers are sucked into a magical video game, and the only way they can escape is to work together to finish the game.")
 				.setPremiereDate(new GregorianCalendar(2017, 12, 21))
@@ -92,20 +103,14 @@ public class Client {
 				.addCastMember(mattLeBlanc)
 				.getSeries();
 		
-		medias.addAll(Arrays.asList(jumanji, ballers, interstellar, gentlemen, friends));
-		mediaRepo.saveAll(medias);
+		mediaRepository.saveAll(Arrays.asList(jumanji, ballers, interstellar, gentlemen, friends));
 		
-		
-		ReviewRepository reviewRepo = context.getBean(ReviewRepository.class);
-		Set<Review> reviews = new HashSet<>();
 		Review jumanjiReview = new Review(stephenCurry, jumanji, "It wasn't bad but I don't think I'm going to watch the next episode if there will be any.", Rating.AVERAGE);
 		Review ballersReviewOne = new Review(csabaSandor, ballers, "I enjoyed a lot. I'm really disappointed that after the 5th season it was cancelled.", Rating.GOOD);
 		Review ballersReviewTwo = new Review(stephenCurry, ballers, "This series is absolutely badass.", Rating.GOOD);
 		Review interstellarReview = new Review(csabaSandor, interstellar, "Anyone who likes science and physics are going to love this movie.", Rating.GOOD);
 		Review gentlemenReview = new Review(csabaSandor, gentlemen, "Just watched it in the cinema. It was awesome. I enjoyed every minute of it.", Rating.GOOD); 
 		Review friendsReview = new Review(joelleHaddad, friends, "I really love this series. Best of all time. Ma favourite character is Rachel of course.", Rating.GOOD);
-		reviews.addAll(Arrays.asList(jumanjiReview, ballersReviewOne, ballersReviewTwo, interstellarReview, gentlemenReview, friendsReview));
-		reviewRepo.saveAll(reviews);
+		reviewRepository.saveAll(Arrays.asList(jumanjiReview, ballersReviewOne, ballersReviewTwo, interstellarReview, gentlemenReview, friendsReview));
 	}
-	
 }

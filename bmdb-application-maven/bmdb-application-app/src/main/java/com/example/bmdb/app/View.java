@@ -1,5 +1,6 @@
 package com.example.bmdb.app;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
@@ -50,9 +51,9 @@ public class View {
 		input.nextLine();
 	}
 	
-	public int readSelectedId() {
+	public Long readSelectedId() {
 		System.out.print(getMessage("media.search"));
-		int id = input.nextInt();
+		Long id = input.nextLong();
 		input.nextLine();
 		return id;
 	}
@@ -62,7 +63,7 @@ public class View {
 		input.nextLine();
 	}
 	
-	public void printMedias(List<Media> medias) {
+	public void printMedias(Collection<Media> medias) {
 		for (Media media : medias) {
 			System.out.println(media.toString());
 		}

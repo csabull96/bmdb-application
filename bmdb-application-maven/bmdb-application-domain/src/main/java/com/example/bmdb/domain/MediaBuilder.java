@@ -1,31 +1,19 @@
 package com.example.bmdb.domain;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class MediaBuilder {
-	private BigDecimal id;
 	private String title;
 	private String description;
 	private Calendar premiereDate;
-	private List<Actor> cast;
-	private List<Review> reviews;
+	private Set<Actor> cast;
+	private Set<Review> reviews;
 	
 	public MediaBuilder() {
-		cast = new ArrayList<Actor>();
-		reviews = new ArrayList<Review>();
-	}
-	
-	public MediaBuilder setId(BigDecimal id) {
-		this.id = id;
-		return this;
-	}
-	
-	public BigDecimal getId() {
-		return id;
+		cast = new HashSet<Actor>();
+		reviews = new HashSet<Review>();
 	}
 	
 	public MediaBuilder setTitle(String title) {
@@ -60,7 +48,7 @@ public class MediaBuilder {
 		return this;
 	}
 	
-	public List<Actor> getCast() {
+	public Set<Actor> getCast() {
 		return cast;
 	}
 	
@@ -69,28 +57,17 @@ public class MediaBuilder {
 		return this;
 	}
 	
-	public List<Review> getReviews() {
+	public Set<Review> getReviews() {
 		return reviews;
 	}
 	
 	public Movie getMovie() {
-		Media movie = new Movie(this);	
-		establishRelations(movie);
+		Media movie = new Movie(this);
 		return new Movie(this);
 	}
 	
 	public Series getSeries() {
-		Series series = new Series(this);	
-		establishRelations(series);
+		Series series = new Series(this);
 		return new Series(this);
-	}
-	
-	private void establishRelations(Media media) {
-		for (Actor actor : cast) {
-			actor.getFilmography().add(media);
-		}
-		for (Review review : reviews) {
-			review.setMedia(media);
-		}
 	}
 }

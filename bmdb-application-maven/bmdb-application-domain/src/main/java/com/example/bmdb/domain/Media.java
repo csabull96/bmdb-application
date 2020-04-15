@@ -1,22 +1,25 @@
 package com.example.bmdb.domain;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.ArrayList;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
 @Entity
 @Inheritance
@@ -27,40 +30,48 @@ public abstract class Media {
 	@GeneratedValue
 	@Column(name = "media_id")
 	private Long id;
-	
-	// has to be replaced
-	@Transient
-	private BigDecimal bdid;
+
 	private String title;
+	
 	private String description;
+	
 	@Temporal(TemporalType.DATE)
 	private Calendar premiereDate;
-	@OneToMany(cascade = CascadeType.ALL)
-	private List<Actor> cast;
-	@OneToMany(cascade = CascadeType.ALL)
-	private List<Review> reviews;
+	
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinTable(name = "media_cast",
+		joinColumns = @JoinColumn(name = "media_id"),
+		inverseJoinColumns = @JoinColumn(name = "actor_id"))
+	private Set<Actor> cast;
+	
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "media")
+	private Set<Review> reviews;
 
+	public Media() {}
+	
 	public Media(MediaBuilder mediaBuilder) {
-		bdid = mediaBuilder.getId();
 		title = mediaBuilder.getTitle();
 		description = mediaBuilder.getDescription();
 		premiereDate = mediaBuilder.getPremiereDate();
-		cast = new ArrayList<Actor>(mediaBuilder.getCast());
-		reviews = new ArrayList<Review>(mediaBuilder.getReviews());
+		cast = new HashSet<Actor>(mediaBuilder.getCast());
+		reviews = new HashSet<Review>(mediaBuilder.getReviews());
 	}
 	
-	public Media() {
-		
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getTitle() {
+		return title;
 	}
 	
-	public BigDecimal getBdid() {
-		return bdid;
+	public void setTitle(String title) {
+		this.title = title;
 	}
-
-	public void setBdid(BigDecimal bdid) {
-		this.bdid = bdid;
-	}
-
+	
 	public String getDescription() {
 		return description;
 	}
@@ -77,50 +88,33 @@ public abstract class Media {
 		this.premiereDate = premiereDate;
 	}
 
-	public List<Actor> getCast() {
+	public Set<Actor> getCast() {
 		return cast;
 	}
 
-	public void setCast(List<Actor> cast) {
+	public void setCast(Set<Actor> cast) {
 		this.cast = cast;
 	}
 
-	public List<Review> getReviews() {
+	public Set<Review> getReviews() {
 		return reviews;
 	}
 
-	public void setReviews(List<Review> reviews) {
+	public void setReviews(Set<Review> reviews) {
 		this.reviews = reviews;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public BigDecimal getId() {
-		return bdid;
-	}
-	
-	public String getTitle() {
-		return title;
-	}
-	
-	public void addReview(Review review) {
-		reviews.add(review);
 	}
 	
 	@Override
 	public String toString() {
+		
+		DateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
+		
 		StringBuilder sb = new StringBuilder();
 		sb.append("Media {")
-		  .append("\n\tID: " + this.bdid)
+		  .append("\n\tID: " + this.id)
 		  .append("\n\tTitle: " + this.title)
 		  .append("\n\tDescription: " + this.description)
-		  .append("\n\tPremiere Date: " + this.premiereDate)
+		  .append("\n\tPremiere Date: " + dateFormat.format(this.premiereDate.getTime()))
 	      .append("\n\tCast {");
 		
 		for (Actor actor : cast) {

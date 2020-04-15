@@ -1,13 +1,13 @@
 package com.example.bmdb.domain;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Review {
@@ -16,17 +16,26 @@ public class Review {
 	@GeneratedValue
 	@Column(name = "review_id")
 	private Long id;
-	@OneToOne(cascade = CascadeType.ALL)
+	
+	@ManyToOne()
+	@JoinColumn(name = "media_id", referencedColumnName = "media_id")
 	private Media media;
-	@OneToOne(cascade = CascadeType.ALL)
+	
+	@ManyToOne()
+	@JoinColumn(name = "user_id", referencedColumnName = "user_id")
 	private User creator;
+	
 	private String text;
+	
 	@Enumerated(EnumType.STRING)
 	private Rating rating;
 		
-	public Review(User creator, String text, Rating rating) {
+	public Review() {};
+	
+	public Review(User creator, Media media, String text, Rating rating) {
 		super();
 		this.creator = creator;
+		this.media = media;
 		this.text = text;
 		this.rating = rating;
 	}

@@ -8,7 +8,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 @Configuration
 public class SpringConfigurationDataSource {
-	private static final String URL = "jdbc:mysql://localhost/sql_bmdb?useSSL=false&useTimezone=true&serverTimezone=UTC";
+	private static final String URL = "jdbc:mysql://localhost/bmdb_sandor_csaba?useSSL=false&useTimezone=true&serverTimezone=UTC";
 	private static final String USER = "root";
 	private static final String PASSWORD = "password";
 
